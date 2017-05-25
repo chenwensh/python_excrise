@@ -15,7 +15,6 @@ def mode1():
 
 	y = x_data * Weights + biases
 	
-	# Define the loss,optimizer and the train of the optimizer.	
 	loss = tf.reduce_mean(tf.square(y - y_data))
 	optimizer = tf.train.GradientDescentOptimizer(0.5)
 	train = optimizer.minimize(loss)

@@ -17,7 +17,41 @@ def add_layer(input, in_size, out_size, activation_function = None):
 		outputs = activation_function(Wx_plus_b)
 	
 	return outputs
-	
+
+def has_layer_model():
+	# Define the input and output train data.
+	x_train = np.linspace(-1, 1, 300, dtype = np.float32)[:, np.newaxis]
+	noise = np.random.normal(0, 0.05, x_train.shape).astype(np.float32)
+	y_train = np.square(x_train) - 0.5 + noise
+	print("x_train:", x_train, "y_train:", y_train)
+
+	# Define the x and y placeholder
+	x = tf.placeholder(tf.float32, [None, 1])
+	y = tf.placeholder(tf.float32, [None, 1])
+
+	# Define the hidden layer and prediction layer
+	l1 = add_layer(x, 1, 10, activation_function = tf.nn.relu)
+	prediction = add_layer(l1, 10, 1, activation_function = None)
+
+	# Loss function
+	loss = tf.reduce_mean(tf.reduce_sum(tf.square(y - prediction), reduction_indices = [1]))
+
+	# Select the optimizer
+	optimizer = tf.train.GradientDescentOptimizer(0.1)
+	train_step = optimizer.minimize(loss)
+
+	# Define the Sess
+	init = tf.global_variables_initializer()
+	sess = tf.Session()
+	sess.run(init)
+
+	# Train the model
+	for step in range(1000):
+		sess.run(train_step, feed_dict = {x : x_train, y : y_train})
+		if step % 100 == 0:
+			print(sess.run(loss, feed_dict = {x : x_train, y : y_train}))
+
+
 def linear_regression_model():
 	# Model parameters
 	W = tf.Variable([.3], tf.float32)
@@ -79,4 +113,5 @@ def linear_simple_mode1():
 if __name__ == '__main__':
 	# Call the modes...
 	#linear_simple_mode1()
-	linear_regression_model()
+	#linear_regression_model()
+	has_layer_model()

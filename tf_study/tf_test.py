@@ -4,6 +4,20 @@
 import tensorflow as tf
 import numpy as np
 
+# Define the add layer function that shows how to transfer the linear to nolinear function.k
+def add_layer(input, in_size, out_size, activation_function = None):
+	Weights = tf.Variable(tf.random_normal([in_size, out_size]))
+	biases = tf.Variable(tf.zeros([1, out_size]) + 0.1)
+	Wx_plus_b = tf.matmul(input, Weights) + biases
+	
+	if activation_function is None:
+		outputs = Wx_plus_b
+	else:
+		# Call activation function to transfer the linear to nonlinear.
+		outputs = activation_function(Wx_plus_b)
+	
+	return outputs
+	
 def linear_regression_model():
 	# Model parameters
 	W = tf.Variable([.3], tf.float32)
@@ -36,7 +50,7 @@ def linear_regression_model():
 			curr_W, curr_b, curr_loss = sess.run([W, b, loss], {x:x_train, y:y_train})
 			print("Current W is %s, current b is %s, current loss is %s."%(curr_W, curr_b, curr_loss))
 	
-def linear_mode1():
+def linear_simple_mode1():
 	# Create the training data
 	x_data = np.random.rand(100).astype(np.float32)
 	y_data = x_data * 0.1 + 0.3
@@ -64,5 +78,5 @@ def linear_mode1():
 
 if __name__ == '__main__':
 	# Call the modes...
-	#linear_mode1()
+	#linear_simple_mode1()
 	linear_regression_model()

@@ -3,6 +3,7 @@
 
 import tensorflow as tf
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Define the add layer function that shows how to transfer the linear to nolinear function.k
 def add_layer(input, in_size, out_size, activation_function = None):
@@ -23,14 +24,14 @@ def has_layer_model():
 	x_train = np.linspace(-1, 1, 300, dtype = np.float32)[:, np.newaxis]
 	noise = np.random.normal(0, 0.05, x_train.shape).astype(np.float32)
 	y_train = np.square(x_train) - 0.5 + noise
-	print("x_train:", x_train, "y_train:", y_train)
+	#print("x_train:", x_train, "y_train:", y_train)
 
 	# Define the x and y placeholder
 	x = tf.placeholder(tf.float32, [None, 1])
 	y = tf.placeholder(tf.float32, [None, 1])
 
 	# Define the hidden layer and prediction layer
-	l1 = add_layer(x, 1, 10, activation_function = tf.nn.relu)
+	l1 = add_layer(x, 1, 10, activation_function = tf.nn.tanh)
 	prediction = add_layer(l1, 10, 1, activation_function = None)
 
 	# Loss function
@@ -40,16 +41,30 @@ def has_layer_model():
 	optimizer = tf.train.GradientDescentOptimizer(0.1)
 	train_step = optimizer.minimize(loss)
 
-	# Define the Sess
+	# Define the session
 	init = tf.global_variables_initializer()
 	sess = tf.Session()
 	sess.run(init)
 
+	# Show the traing status
+	fig = plt.figure()
+	ax = fig.add_subplot(1, 1, 1)
+	ax.scatter(x_train, y_train)
+	plt.ion()
+	plt.show()
+
 	# Train the model
-	for step in range(1000):
+	for step in range(5000):
 		sess.run(train_step, feed_dict = {x : x_train, y : y_train})
 		if step % 100 == 0:
-			print(sess.run(loss, feed_dict = {x : x_train, y : y_train}))
+		#	print(sess.run(loss, feed_dict = {x : x_train, y : y_train}))
+			try:
+				ax.lines.remove(lines[0])
+			except Exception:
+				pass
+			prediction_value = sess.run(prediction, feed_dict = {x : x_train})
+			lines = ax.plot(x_train, prediction_value, 'r-', lw = 5)
+			plt.pause(0.1)
 
 
 def linear_regression_model():

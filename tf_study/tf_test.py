@@ -4,6 +4,10 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+import sys
+
+FLAGS = None
 
 # Define the add layer function that shows how to transfer the linear to nolinear function.k
 def add_layer(input, in_size, out_size, activation_function = None):
@@ -99,7 +103,7 @@ def linear_regression_model():
 			curr_W, curr_b, curr_loss = sess.run([W, b, loss], {x:x_train, y:y_train})
 			print("Current W is %s, current b is %s, current loss is %s."%(curr_W, curr_b, curr_loss))
 	
-def linear_simple_mode1():
+def linear_simple_model1():
 	# Create the training data
 	x_data = np.random.rand(100).astype(np.float32)
 	y_data = x_data * 0.1 + 0.3
@@ -125,8 +129,18 @@ def linear_simple_mode1():
 		if step % 20 == 0:
 			print(step, sess.run(Weights), sess.run(biases))
 
+def main(_):
+	# Call the function with the function's string name from input parameter
+	globals()[FLAGS.model_name]()
+
 if __name__ == '__main__':
-	# Call the modes...
-	#linear_simple_mode1()
-	#linear_regression_model()
-	has_layer_model()
+	parser = argparse.ArgumentParser()
+	parser.add_argument(
+		'--model_name',
+		type = str,
+		default = 'linear_simple_model1',
+		help = 'Model name:linear_simple_model1,linear_regression_model,has_layer_model.More will be added soon.'
+	)
+	
+	FLAGS, unparsed = parser.parse_known_args()
+	tf.app.run(main = main, argv = [sys.argv[0]] + unparsed)

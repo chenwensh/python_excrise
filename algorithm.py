@@ -27,8 +27,9 @@ def prime_number():
     p = int(input("Please input the  number you want:"))
     for i in range(1, p+1):
         flag = True
-        for j in range(2, i):
-            if i % j == 0:
+        #for j in range(2, i):
+        for j in [2, 3, 5, 7]:
+            if i % j == 0 and i != j:
                 flag = False
                 break
         if flag == True:
@@ -57,6 +58,7 @@ def sort():
                 arr[i], arr[j] = arr[j], arr[i]
 
     print("The sorted list is:",arr)
+
 
 if __name__ == "__main__":
     print("Welcome to the algorithm! world!I hope you can enjoy it!")

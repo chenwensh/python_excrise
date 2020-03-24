@@ -28,8 +28,8 @@ class Ball:
 
     def hit_paddle(self, pos):
         paddle_pos = self.canvas.coords(self.paddle.id)
-        if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:
-            if pos[3] >= paddle_pos[1] and pos[3] <= paddle_pos[3]:
+        if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]: #If the ball x axis is in the paddle x axis scope.
+            if pos[3] >= paddle_pos[1] and pos[3] <= paddle_pos[3]: #If the ball y axis is in the paddle y axis scope.
                 self.x += self.paddle.x
                 self.score.hit()
                 return True
@@ -38,6 +38,8 @@ class Ball:
     def draw(self):
         self.canvas.move(self.id, self.x, self.y) 
         pos = self.canvas.coords(self.id)
+        #Usually will go every [3,3] step except hit the top/bottom or left/right line.
+        #In this exceptions, the ball should go back with -3 step in x or y axis.
         if pos[1] <= 0:
             self.y = 3
         if pos[3] >= self.canvas_height:
@@ -63,12 +65,12 @@ class Paddle:
         self.x = 0
 
     def draw(self):
-        self.canvas.move(self.id, self.x, 0)
         pos = self.canvas.coords(self.id)
-        if pos[0] <= 0:
+        if pos[0] + self.x <= 0:
             self.x = 0
-        elif pos[2] >= self.canvas_width:
+        elif pos[2] + self.x >= self.canvas_width:
             self.x = 0
+        self.canvas.move(self.id, self.x, 0)
 
     def turn_left(self, evt):
         self.x = -3
@@ -106,7 +108,7 @@ class StartButton:
             self.button.forget()
             self.init_game()
 
-    def init_game(self): 
+    def init_game(self):
         self.ball.inits()
         self.paddle.inits()
         self.score.inits()
@@ -138,8 +140,8 @@ if __name__ == '__main__':
             canvas.itemconfig(game_over_text, state = 'normal')
             startbutton.button.pack()
             startbutton.started = False
-        #tk.update_idletasks()
+        tk.update_idletasks()
         tk.update()
         time.sleep(0.01)
 
-    tk.mainloop()
+    #tk.mainloop()

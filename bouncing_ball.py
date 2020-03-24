@@ -14,13 +14,16 @@ class Ball:
         self.paddle = paddle
         self.score = score
         self.id = canvas.create_oval(10, 10, 25, 25, fill = color)
-        self.canvas.move(self.id, 245, 100)
+        self.inits()
+        self.canvas_height = self.canvas.winfo_height()
+        self.canvas_width = self.canvas.winfo_width()
+
+    def inits(self):
+        self.canvas.coords(self.id, 255, 110, 270, 125) #Set the initial coords of Ball.
         starts = [-3, -2, -1, 1, 2, 3]
         random.shuffle(starts)
         self.x = starts[0]
         self.y = -3
-        self.canvas_height = self.canvas.winfo_height()
-        self.canvas_width = self.canvas.winfo_width()
         self.hit_bottom = False
 
     def hit_paddle(self, pos):
@@ -50,13 +53,14 @@ class Paddle:
     def __init__(self, canvas, color):
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 0, 100, 10, fill = color)
-        self.canvas.move(self.id, 200, 300)
-        self.x = 0
+        self.inits()
         self.canvas_width = self.canvas.winfo_width()
-        self.started = False
         self.canvas.bind_all('<KeyPress-Left>', self.turn_left)
         self.canvas.bind_all('<KeyPress-Right>', self.turn_right)
-        self.canvas.bind_all('<Button-1>', self.start_game)
+
+    def inits(self):
+        self.canvas.coords(self.id, 200, 300, 300, 310) #Set the initial coords of the paddle.
+        self.x = 0
 
     def draw(self):
         self.canvas.move(self.id, self.x, 0)
@@ -67,13 +71,10 @@ class Paddle:
             self.x = 0
 
     def turn_left(self, evt):
-        self.x = -2
+        self.x = -3
 
     def turn_right(self, evt):
-        self.x = 2
-
-    def start_game(self, evt):
-        self.started = True
+        self.x = 3
 
 class Score:
     def __init__(self, canvas, color):
@@ -84,6 +85,28 @@ class Score:
     def hit(self):
         self.score += 1
         self.canvas.itemconfig(self.id, text = self.score)
+
+class StartButton:
+    def __init__(self, canvas, ball, paddle, score):
+        self.canvas = canvas
+        self.ball = ball
+        self.paddle = paddle
+        self.score = score
+        self.button = Button(tk, text = 'Start', command = self.callback)
+        self.button.pack()
+        self.started = False 
+
+    def callback(self):
+        if self.started == False:
+            self.started = True
+            self.button.forget()
+
+    def init_game(self): #TODO: Init the score...
+        self.ball.inits()
+        self.paddle.inits()
+        self.score.score = 0
+        #self.canvas.itemconfig(score, text = '0')
+        self.canvas.itemconfig(game_over_text, state = 'hidden')
 
 if __name__ == '__main__':
 
@@ -99,15 +122,19 @@ if __name__ == '__main__':
     paddle = Paddle(canvas, 'blue')
     score = Score(canvas, 'green')
     ball = Ball(canvas, paddle, score, 'red')
+    startbutton = StartButton(canvas, ball, paddle, score)
     game_over_text = canvas.create_text(250, 200, text = 'GAME OVER', state = 'hidden')
 
     while 1:
-        if ball.hit_bottom == False and paddle.started == True:
+        if ball.hit_bottom == False and startbutton.started == True:
             ball.draw()
             paddle.draw()
         if ball.hit_bottom == True:
             time.sleep(1)
             canvas.itemconfig(game_over_text, state = 'normal')
+            startbutton.button.pack()
+            startbutton.started = False
+            startbutton.init_game()
         tk.update_idletasks()
         tk.update()
         time.sleep(0.01)

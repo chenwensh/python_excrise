@@ -82,6 +82,10 @@ class Score:
         self.canvas = canvas
         self.id = canvas.create_text(450, 10, text = self.score, fill = color)
 
+    def inits(self):
+        self.score = 0
+        self.canvas.itemconfig(self.id, text = self.score)
+
     def hit(self):
         self.score += 1
         self.canvas.itemconfig(self.id, text = self.score)
@@ -100,12 +104,12 @@ class StartButton:
         if self.started == False:
             self.started = True
             self.button.forget()
+            self.init_game()
 
-    def init_game(self): #TODO: Init the score...
+    def init_game(self): 
         self.ball.inits()
         self.paddle.inits()
-        self.score.score = 0
-        #self.canvas.itemconfig(score, text = '0')
+        self.score.inits()
         self.canvas.itemconfig(game_over_text, state = 'hidden')
 
 if __name__ == '__main__':
@@ -134,8 +138,7 @@ if __name__ == '__main__':
             canvas.itemconfig(game_over_text, state = 'normal')
             startbutton.button.pack()
             startbutton.started = False
-            startbutton.init_game()
-        tk.update_idletasks()
+        #tk.update_idletasks()
         tk.update()
         time.sleep(0.01)
 

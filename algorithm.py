@@ -1,8 +1,8 @@
-#!/usr/bin/env python
-# -*- coding:utf-8
-
 #This programe is to exercise the children who are interest in algorithm.
 #Author: Theo Chen    Date:2020/3/8
+
+#!/usr/bin/env python
+# -*- coding:utf-8
 
 import random
 
@@ -48,7 +48,7 @@ def randomarr(n):
     return random.sample(range(1, n + 1), n)
 
 def sort():
-    arr = randomarr(50)
+    arr = randomarr(9)
     print("The origin list is:",arr)
 
     arrlen = len(arr)

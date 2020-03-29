@@ -1,8 +1,8 @@
-#/usr/bin/env python
-# _*_ coding:utf-8 _*_
-
 #It's a bouncing game from the <python for kids>
 #Author: CHEN Wen.
+
+#/usr/bin/env python
+# _*_ coding:utf-8 _*_
 
 from tkinter import *
 import random
@@ -82,15 +82,15 @@ class Score:
     def __init__(self, canvas, color):
         self.score = 0
         self.canvas = canvas
-        self.id = canvas.create_text(450, 10, text = self.score, fill = color)
+        self.id = canvas.create_text(450, 10, text = 'Score:' + str(self.score), fill = color)
 
     def inits(self):
         self.score = 0
-        self.canvas.itemconfig(self.id, text = self.score)
+        self.canvas.itemconfig(self.id, text = 'Score:' + str(self.score))
 
     def hit(self):
         self.score += 1
-        self.canvas.itemconfig(self.id, text = self.score)
+        self.canvas.itemconfig(self.id, text = 'Score:' + str(self.score))
 
 class StartButton:
     def __init__(self, canvas, ball, paddle, score):

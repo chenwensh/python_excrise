@@ -1,0 +1,6 @@
+#This file is to record the important information about the Great Wall tools.
+
+
+#Below is for creating the v2ray service in Google Cloud.
+sudo -i
+bash <(curl -s -L https://git.io/v2ray.sh)

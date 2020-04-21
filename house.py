@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*- 
 # This codes are for house trade infomation.
 
-# -*- coding:utf-8 -*-
+#!/usr/bin/env python
+# -*- coding:utf-8 -*- 
 
 import requests
 import re

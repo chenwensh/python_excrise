@@ -20,12 +20,15 @@ class Ball:
 
     def inits(self):
         self.canvas.coords(self.id, 255, 110, 270, 125) #Set the initial coords of Ball.
+
+        # Set the velocity of the ball...
         starts = [-3, -2, -1, 1, 2, 3]
         random.shuffle(starts)
         self.x = starts[0]
         self.y = -3
         self.hit_bottom = False
 
+        
     def hit_paddle(self, pos):
         paddle_pos = self.canvas.coords(self.paddle.id)
         if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]: #If the ball x axis is in the paddle x axis scope.
@@ -36,10 +39,10 @@ class Ball:
         return False
 
     def draw(self):
-        self.canvas.move(self.id, self.x, self.y) 
         pos = self.canvas.coords(self.id)
-        #Usually will go every [3,3] step except hit the top/bottom or left/right line.
-        #In this exceptions, the ball should go back with -3 step in x or y axis.
+        
+        #Usually will go every initial velocity step except hit the top/bottom or left/right line.
+        #In the below exceptions, the ball should go back with 3 step in x or y axis.
         if pos[1] <= 0:
             self.y = 3
         if pos[3] >= self.canvas_height:
@@ -50,6 +53,8 @@ class Ball:
             self.x = 3
         if pos[2] >= self.canvas_width:
             self.x = -3
+
+        self.canvas.move(self.id, self.x, self.y) 
 
 class Paddle:
     def __init__(self, canvas, color):

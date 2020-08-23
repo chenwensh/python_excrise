@@ -1,6 +1,12 @@
 #This file is to record the important information about the Great Wall tools.
 
-
 #Below is for creating the v2ray service in Google Cloud.
+
+#Step 1: setup the firewall rules in Google cloud.
+#Please refer to the Youtube video.
+
+#Step 2: setup in the VM.
 sudo -i
 bash <(curl -s -L https://git.io/v2ray.sh)
+
+#Step 3: configure in the Netgear Router.
